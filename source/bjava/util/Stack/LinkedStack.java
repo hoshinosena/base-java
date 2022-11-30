@@ -19,10 +19,10 @@ package bjava.util.Stack;
 import bjava.util.List.LinkedNode;
 
 public class LinkedStack<E> implements Stack<E> {
-    private LinkedNode<E> head;
+    private final LinkedNode<E> head;
     private int size;
     public LinkedStack() {
-        head = new LinkedNode<E>();
+        head = new LinkedNode<>();
         size = 0;
     }
     public boolean empty() {
@@ -71,16 +71,34 @@ public class LinkedStack<E> implements Stack<E> {
     public int search(E item) {
         int i = 1;
         LinkedNode<E> temp = head.next;
-        while(temp != null && temp.data != item) {
-            temp = temp.next;
-            i++;
+        //while(temp != null && temp.data != item) {
+        //    temp = temp.next;
+        //    i++;
+        //}
+        //return temp == null ? -1 : size - i;
+        try {
+            while(temp.data != item) {
+                temp = temp.next;
+                i++;
+            }
         }
-        return temp == null ? -1 : i;
+        catch (Exception NullPointerException) {
+            return -1;
+        }
+        return size - i;
     }
     public boolean contains(E item) {
         LinkedNode<E> temp = head.next;
-        while(temp != null && temp.data != item)
-            temp = temp.next;
-        return temp != null;
+        //while(temp != null && temp.data != item)
+        //    temp = temp.next;
+        //return temp != null;
+        try {
+            while(temp.data != item)
+                temp = temp.next;
+        }
+        catch (Exception NullPointerException) {
+            return false;
+        }
+        return true;
     }
 }

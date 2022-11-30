@@ -79,16 +79,21 @@ public class SqStack<E> implements Stack<E> {
         }
     }
     public int search(E item) {
-        int temp = 1;
-        for (int i=top; -1<i; i--, temp++)
-            if (item == (E)data[i])
-                return temp;
-        return -1;
+        int i = 0;
+        //while (i<=top)
+        //    if (item == (E)data[i++])
+        //        return --i;
+        //return -1;
+        try {
+            while (true)
+                if (item == data[i++])
+                    return --i;
+        }
+        catch (Exception ArrayIndexOutOfBoundsException) {
+            return -1;
+        }
     }
     public boolean contains(E item) {
-        for (int i=top; -1<top; top--)
-            if (item == (E)data[i])
-                return true;
-        return false;
+        return search(item) != -1;
     }
 }

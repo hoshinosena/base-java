@@ -103,14 +103,20 @@ public class LinkedList<E> implements List<E>{
     public boolean setHead(LinkedNode<E> head) {
         int size = 0;
         LinkedNode<E> temp = this.head;
-        for (; temp!=head && temp!=null; temp=temp.next);
-        if (temp == null)
+        //for (; temp!=head && temp!=null; temp=temp.next)
+        //    size++;
+        //if (temp == null)
+        //    return false;
+        try {
+            for (; temp!=head; temp=temp.next)
+                size++;
+        }
+        catch (Exception NullPointerException) {
             return false;
-        temp = first;
-        for (; temp!=tail; temp=temp.next, size++);
+        }
         first.next = head;
         this.head = head;
-        this.size = size;
+        this.size -= size;
         return true;
     }
     public LinkedNode<E> getTail() {
@@ -119,13 +125,19 @@ public class LinkedList<E> implements List<E>{
         return tail;
     }
     public boolean setTail(LinkedNode<E> tail) {
-        int size = 0;
+        int size = 1;
         LinkedNode<E> temp = head;
-        for (; temp!=tail && temp!=null; temp=temp.next);
-        if (temp == null)
+        //for (; temp!=tail && temp!=null; temp=temp.next)
+        //    size++;
+        //if (temp == null)
+        //    return false;
+        try {
+            for (; temp!=tail; temp=temp.next)
+                size++;
+        }
+        catch (Exception NullPointerException) {
             return false;
-        temp = first;
-        for (; temp!=tail; temp=temp.next, size++);
+        }
         tail.next = null;
         this.tail = tail;
         this.size = size;
@@ -153,9 +165,20 @@ public class LinkedList<E> implements List<E>{
         tail = list.tail;
         size += list.size;
     }
-    public LinkedNode<E> getNode(int index) {
+    private LinkedNode<E> node(int index) {
         LinkedNode<E> temp = first;
-        for(int j=-1; j<index; j++)
+        for (int j=-1; j<index; j++)
+            temp = temp.next;
+        return temp;
+    }
+    public LinkedNode<E> getNode(int index) {
+        if (index < 0 || size <= index)
+            throw new IllegalArgumentException("位置非法");
+        return node(index);
+    }
+    public LinkedNode<E> getNode(E element) {
+        LinkedNode<E> temp = head;
+        while (temp != null && temp.data != element)
             temp = temp.next;
         return temp;
     }
@@ -170,7 +193,7 @@ public class LinkedList<E> implements List<E>{
         if (index < 0 || size < index)
             throw new IllegalArgumentException("位置非法");
         LinkedNode<E> temp1 = new LinkedNode<>(element);
-        LinkedNode<E> temp2 = getNode(index-1);
+        LinkedNode<E> temp2 = node(index-1);
         temp1.next = temp2.next;
         temp2.next = temp1;
         head = first.next;
@@ -179,9 +202,9 @@ public class LinkedList<E> implements List<E>{
         size++;
     }
     public E remove(int index) {
-        if (index < 0 || size - 1 < index)
+        if (index < 0 || size <= index)
             throw new IllegalArgumentException("位置非法");
-        LinkedNode<E> temp = getNode(index-1);
+        LinkedNode<E> temp = node(index-1);
         E element = temp.data;
         temp.next = temp.next.next;
         head = first.next;
@@ -199,7 +222,7 @@ public class LinkedList<E> implements List<E>{
     public void removeAfterElem(int len) {
         if(len < 0 || size < len)
             throw new IllegalArgumentException("长度非法");
-        LinkedNode<E> temp = getNode(len-1);
+        LinkedNode<E> temp = node(len-1);
         temp.next = null;
         head = first.next;
         if (head == null)
@@ -208,28 +231,37 @@ public class LinkedList<E> implements List<E>{
         size = len;
     }
     public E get(int index) {
-        if (index < 0 || size - 1 < index)
+        if (index < 0 || size <= index)
             throw new IllegalArgumentException("元素非法");
-        LinkedNode<E> temp = getNode(index);
+        LinkedNode<E> temp = node(index);
         return temp.data;
     }
     public E set(int index, E element) {
-        if (index < 0 || size - 1 < index)
+        if (index < 0 || size <= index)
             throw new IllegalArgumentException("元素非法");
-        LinkedNode<E> temp = getNode(index);
+        LinkedNode<E> temp = node(index);
         E oldVal = temp.data;
         temp.data = element;
         return oldVal;
     }
     public int indexOf(E element) {
-        int i=0;
+        int i = 0;
         LinkedNode<E> temp = head;
-        while(temp != null && temp.data != element) {
-            temp = temp.next;
-            i++;
+        //while(temp != null && temp.data != element) {
+        //   temp = temp.next;
+        //    i++;
+        //}
+        //if(temp == null)
+        //    return -1;
+        try {
+            while(temp.data != element) {
+                temp = temp.next;
+                i++;
+            }
         }
-        if(temp == null)
+        catch (Exception NullPointerException) {
             return -1;
+        }
         return i;
     }
     /**
@@ -265,8 +297,8 @@ public class LinkedList<E> implements List<E>{
         LinkedNode<E> temp1;
         LinkedNode<E> temp2;
         try {
-            temp1 = getNode(i);
-            temp2 = getNode(j);
+            temp1 = node(i);
+            temp2 = node(j);
         }
         catch (Exception IllegalArgumentException) {
             return false;
@@ -279,10 +311,19 @@ public class LinkedList<E> implements List<E>{
     public String toString() {
         String ans ="";
         LinkedNode<E> temp = head;
-        while(temp != null) {
-            ans += temp.data + " ";
-            temp = temp.next;
+        //while(temp != null) {
+        //    ans += temp.data + " ";
+        //    temp = temp.next;
+        //}
+        try {
+            while(true) {
+                ans += temp.data + " ";
+                temp = temp.next;
+            }
         }
+        catch (Exception NullPointerException) {
+
+        };
         return ans;
     }
 }
